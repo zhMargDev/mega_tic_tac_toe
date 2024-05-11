@@ -1,42 +1,45 @@
 <template>
     <div id="game_main_box" :style="{'height': size, 'width': size}">
+        <span id="blocker" v-if="!gameTurn || gameWinner === 'noOne' || gameBlockRate !== latticeRate + 1 && gameBlockRate !== -1"></span>
+        <div id="blocker" v-if="gameWinner === 'o'"><img src="@/assets/svgs/o.svg"></div>
+        <div id="blocker" v-if="gameWinner === 'x'"><img src="@/assets/svgs/x.svg"></div>
         <!-- <img src="@/assets/svgs/cells.svg" id="background"> -->
         <div id="game_box">
-            <button class="row1 col1" @click="step(0, 0)">
+            <button class="row1 col1" @click="step(0, 0, 1)">
                 <img src="@/assets/svgs/x.svg" v-if="lattice[0][0] === 'x'" class="card">
                 <img src="@/assets/svgs/o.svg" v-if="lattice[0][0] === 'o'" class="card">
             </button>
-            <button class="row1 col2" @click="step(0, 1)">
+            <button class="row1 col2" @click="step(0, 1, 2)">
                 <img src="@/assets/svgs/x.svg" v-if="lattice[0][1] === 'x'" class="card">
                 <img src="@/assets/svgs/o.svg" v-if="lattice[0][1] === 'o'" class="card">
             </button>
-            <button class="row1 col3" @click="step(0, 2)">
+            <button class="row1 col3" @click="step(0, 2, 3)">
                 <img src="@/assets/svgs/x.svg" v-if="lattice[0][2] === 'x'" class="card">
                 <img src="@/assets/svgs/o.svg" v-if="lattice[0][2] === 'o'" class="card">
             </button>
             
-            <button class="row2 col1" @click="step(1, 0)">
+            <button class="row2 col1" @click="step(1, 0, 4)">
                 <img src="@/assets/svgs/x.svg" v-if="lattice[1][0] === 'x'" class="card">
                 <img src="@/assets/svgs/o.svg" v-if="lattice[1][0] === 'o'" class="card">
             </button>
-            <button class="row2 col2" @click="step(1, 1)">
+            <button class="row2 col2" @click="step(1, 1, 5)">
                 <img src="@/assets/svgs/x.svg" v-if="lattice[1][1] === 'x'" class="card">
                 <img src="@/assets/svgs/o.svg" v-if="lattice[1][1] === 'o'" class="card">
             </button>
-            <button class="row2 col3" @click="step(1, 2)">
+            <button class="row2 col3" @click="step(1, 2, 6)">
                 <img src="@/assets/svgs/x.svg" v-if="lattice[1][2] === 'x'" class="card">
                 <img src="@/assets/svgs/o.svg" v-if="lattice[1][2] === 'o'" class="card">
             </button>
 
-            <button class="row3 col1" @click="step(2, 0)">
+            <button class="row3 col1" @click="step(2, 0, 7)">
                 <img src="@/assets/svgs/x.svg" v-if="lattice[2][0] === 'x'" class="card">
                 <img src="@/assets/svgs/o.svg" v-if="lattice[2][0] === 'o'" class="card">
             </button>
-            <button class="row3 col2" @click="step(2, 1)">
+            <button class="row3 col2" @click="step(2, 1, 8)">
                 <img src="@/assets/svgs/x.svg" v-if="lattice[2][1] === 'x'" class="card">
                 <img src="@/assets/svgs/o.svg" v-if="lattice[2][1] === 'o'" class="card">
             </button>
-            <button class="row3 col3" @click="step(2, 2)">
+            <button class="row3 col3" @click="step(2, 2, 9)">
                 <img src="@/assets/svgs/x.svg" v-if="lattice[2][2] === 'x'" class="card">
                 <img src="@/assets/svgs/o.svg" v-if="lattice[2][2] === 'o'" class="card">
             </button>
@@ -56,26 +59,41 @@ export default{
         lattice: Object,
         latticeRate: Number,
         gameTurn: Boolean,
-        gameWinner: String
-    },
-    mounted(){
+        gameWinner: String,
+        gameRate: String,
+        gameBlockRate: Number
     },
     methods:{
-        step(row, index){
-            if(this.turn === 'x'){
-                this.$emit('game', [row, index, 'x', this.latticeRate])
-                this.turn = 'o';
-            }
-            else if(this.turn === 'o'){
-                this.$emit('game', [row, index, 'o', this.latticeRate])
-                this.turn = 'x';
-            }
+        step(row, index, nextGameIndex){
+            this.$emit('game', {
+                row: row, 
+                index: index, 
+                XorO: this.gameRate, 
+                boxIndex: this.latticeRate,
+                nextGameIndex: nextGameIndex
+            });
         }
     }
 }
 </script>
 
 <style scoped>
+#blocker{
+    width: 95%;
+    height: 95%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 100;
+    background: #0005;
+    transform: translate(-50%, -50%);
+    border-radius: 15px;
+    display: flex;
+}
+#blocker img{
+    width: 70%;
+    margin: auto;
+}
 #game_main_box{
     position: relative;
 }
