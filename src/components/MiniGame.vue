@@ -49,11 +49,6 @@
 
 <script>
 export default{
-    data(){
-        return{
-            turn: 'x',
-        }
-    },
     props:{
         size: String,
         lattice: Object,
